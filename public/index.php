@@ -14,8 +14,16 @@ defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV
 //error_reporting(E_ALL);
 
 //echo "<pre>";
+//print_r(basename($_SERVER['SCRIPT_NAME']));
+//echo "<br>";
+//print_r(dirname(dirname($_SERVER['SCRIPT_NAME'])));
+//echo "</pre>";
+//exit();
+
+//echo "<pre>";
 //print_r($_SERVER);
 //echo "</pre>";
+//exit();
 //
 //echo "<pre>";
 //print_r($_REQUEST);
@@ -27,10 +35,10 @@ defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV
 
 define ('__SOURCE_PATH', realpath(dirname(dirname(__FILE__))));
 
-// define the site path __ADMIN_PATH : c:\xampp\htdocs\pc-simple\admin
+// define the MySite path __ADMIN_PATH : c:\xampp\htdocs\pc-simple\admin
 define ('__ADMIN_PATH', __SOURCE_PATH.'/admin/');
 
-// define the site path __APP_PATH : c:\xampp\htdocs\pc-simple\app
+// define the MySite path __APP_PATH : c:\xampp\htdocs\pc-simple\app
 define ('__APP_PATH', __SOURCE_PATH.'/app/');
 
 // __APP_URL : /pc-simple/public/
@@ -38,9 +46,9 @@ define ('__APP_URL', str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['
 
 // ---- Khong Thay Doi ---- //
 define ('__ASSET_URL', __APP_URL.'assets/');
-define ('__IMAGE_URL', __APP_URL.'images/');
-define ('__CSS_URL', __APP_URL.'css/');
-define ('__JS_URL', __APP_URL.'js/');
+define ('__IMAGE_URL', __ASSET_URL.'images/');
+define ('__CSS_URL', __ASSET_URL.'css/');
+define ('__JS_URL', __ASSET_URL.'js/');
 
 // 	$const = get_defined_constants(true);
 // 	echo "<pre>";
@@ -61,15 +69,19 @@ define ('__JS_URL', __APP_URL.'js/');
     $loader = new \Phalcon\Loader();
     $loader->registerNamespaces(
         array (
+            'Helper' => __APP_PATH.'helper',
             'App' => $config['application']['libraryDir'],
             'App\Controllers' => __APP_PATH.'controllers/',
             'App\Models' => __APP_PATH.'models/',
-
             'Admin\Controllers' => __ADMIN_PATH.'controllers/'
+//            'MyApp\Plugins' => $config->application->pluginsDir,
+//            'MyApp\MyClass' => __APP_PATH.'myapp-class'
         )
     );
     // Register autoloader
     $loader->register();
+
+    use Helper\Common as Common;
 
     // Init a DI
     $di = new \Phalcon\DI\FactoryDefault();
