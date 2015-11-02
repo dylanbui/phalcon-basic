@@ -25,8 +25,13 @@ defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV
 //    Phalcon\DI\FactoryDefault,
 //    Phalcon\Mvc\Url as UrlResolver;
 
+define ('__SOURCE_PATH', realpath(dirname(dirname(__FILE__))));
+
+// define the site path __ADMIN_PATH : c:\xampp\htdocs\pc-simple\admin
+define ('__ADMIN_PATH', __SOURCE_PATH.'/admin/');
+
 // define the site path __APP_PATH : c:\xampp\htdocs\pc-simple\app
-define ('__APP_PATH', realpath(dirname(dirname(__FILE__))).'/app/');
+define ('__APP_PATH', __SOURCE_PATH.'/app/');
 
 // __APP_URL : /pc-simple/public/
 define ('__APP_URL', str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']));
@@ -56,9 +61,11 @@ define ('__JS_URL', __APP_URL.'js/');
     $loader = new \Phalcon\Loader();
     $loader->registerNamespaces(
         array (
-            'MyApp' => $config['application']['libraryDir'],
-            'MyApp\Controllers' => $config['application']['controllersDir'],
-            'MyApp\Models' => $config['application']['modelsDir']
+            'App' => $config['application']['libraryDir'],
+            'App\Controllers' => __APP_PATH.'controllers/',
+            'App\Models' => __APP_PATH.'models/',
+
+            'Admin\Controllers' => __ADMIN_PATH.'controllers/'
         )
     );
     // Register autoloader
@@ -79,7 +86,7 @@ define ('__JS_URL', __APP_URL.'js/');
     /**
      * Handle the request
      */
-    $application = new \MyApp\Application($di, $config);
+    $application = new \App\Application($di, $config);
 // -- Do not use \Exception because it was captured in ErrorHandle --
     $application->main();
 //    echo $application->handle()->getContent();
