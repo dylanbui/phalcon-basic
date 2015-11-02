@@ -1,6 +1,6 @@
 <?php
 
-namespace MyApp\Controllers\IndexShowNamespace;
+namespace App\Controllers\IndexShowNamespace;
 
 class UsersManagerController extends ControllerBase
 {
@@ -8,6 +8,9 @@ class UsersManagerController extends ControllerBase
     public function indexAction()
     {
         $this->view->fileAction = '[' . __METHOD__ . ']';
+        echo "[' . __METHOD__ . ']'";
+
+
 //        exit();
     }
 

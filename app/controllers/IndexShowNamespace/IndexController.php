@@ -1,6 +1,6 @@
 <?php
 
-namespace MyApp\Controllers\IndexShowNamespace;
+namespace App\Controllers\IndexShowNamespace;
 
 class IndexController extends ControllerBase
 {

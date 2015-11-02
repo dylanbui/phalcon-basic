@@ -2,7 +2,7 @@
 /*
  * https://github.com/phalcon/incubator/tree/master/Library/Phalcon/Error
 */
-namespace MyApp;
+namespace App;
 
 use Phalcon\Di;
 

@@ -9,7 +9,7 @@
  * other resources.
  */
 
-namespace MyApp;
+namespace App;
 
 use Phalcon\DiInterface,
     Phalcon\DI\FactoryDefault,
@@ -48,7 +48,8 @@ class Application extends \Phalcon\Mvc\Application
          */
         $this->getDI()->set('view', function() use ($config) {
             $view = new View();
-            $view->setViewsDir($this->config['application']['viewsDir']);
+//            $view->setViewsDir($this->config['application']['viewsDir']);
+            $view->setViewsDir(__APP_PATH.'views/');
             $view->registerEngines(array(
                 '.volt' => function($view, $di) use ($config) {
 
@@ -110,13 +111,15 @@ class Application extends \Phalcon\Mvc\Application
             foreach ($this->config['routers'] as $link => $itemRouter)
                 $router->add($link, $itemRouter);
 
-            $router->add('/', array(
+            $router->add('[/]{0,1}', array(
+                'sub-path' => 'app',
                 'sub-module' => 'index',
                 'controller' => 'index',
                 'action' => 'index'
             ));
 
             $router->add('/([a-zA-Z0-9\_\-]+)/:controller/:action/:params', array(
+                'sub-path' => 'app',
                 'sub-module' => 1,
                 'controller' => 2,
                 'action' => 3,
@@ -126,12 +129,47 @@ class Application extends \Phalcon\Mvc\Application
             });;
 
             $router->add('/([a-zA-Z0-9\_\-]+)/:controller[/]{0,1}', array(
+                'sub-path' => 'app',
                 'sub-module' => 1,
                 'controller' => 2,
                 'action' => 'index'
             ));
 
             $router->add('/([a-zA-Z0-9\_\-]+)[/]{0,1}', array(
+                'sub-path' => 'app',
+                'sub-module' => 1,
+                'controller' => 'index',
+                'action' => 'index'
+            ));
+
+            // -- Nhung router Admin thi de phia sau, no se match voi router gan giong nhat --
+
+            $router->add('/admin', array(
+                'sub-path' => 'admin',
+                'sub-module' => 'index',
+                'controller' => 'index',
+                'action' => 'index'
+            ));
+
+            $router->add('/admin/([a-zA-Z0-9\_\-]+)/:controller/:action/:params', array(
+                'sub-path' => 'admin',
+                'sub-module' => 1,
+                'controller' => 2,
+                'action' => 3,
+                'params' => 4
+            ))->convert('action', function($action){
+                return Text::camelize($action);
+            });;
+
+            $router->add('/admin/([a-zA-Z0-9\_\-]+)/:controller[/]{0,1}', array(
+                'sub-path' => 'admin',
+                'sub-module' => 1,
+                'controller' => 2,
+                'action' => 'index'
+            ));
+
+            $router->add('/admin/([a-zA-Z0-9\_\-]+)[/]{0,1}', array(
+                'sub-path' => 'admin',
                 'sub-module' => 1,
                 'controller' => 'index',
                 'action' => 'index'
@@ -168,12 +206,33 @@ class Application extends \Phalcon\Mvc\Application
                 print_r($event->getType());
                 echo "</pre></b>";
 
-                $sub_module = $dispatcher->getParam('sub-module');
-                if(!empty($sub_module)) {
-//                    $dispatcher->setDefaultNamespace("MyApp\\Controllers\\".Text::camelize($sub_module));
-                    $dispatcher->setNamespaceName("MyApp\\Controllers\\".Text::camelize($sub_module));
-//                    $dispatcher->getDI()->get('router')->setDefaultNamespace("MyApp\\Controllers\\".Text::camelize($sub_module));
+                $sub_path = $dispatcher->getParam('sub-path');
+                if(!empty($sub_path)) {
+                    $sub_module = $dispatcher->getParam('sub-module');
+
+//                    echo "<pre>";
+//                    print_r(Text::camelize($sub_path)."\\Controllers\\".Text::camelize($sub_module));
+//                    echo "</pre>";
+//                    exit();
+
+                    $dispatcher->setNamespaceName(Text::camelize($sub_path)."\\Controllers\\".Text::camelize($sub_module));
+                    $view = $dispatcher->getDI()->get('view');
+                    $view->setViewsDir(__SOURCE_PATH."/{$sub_path}/views/");
+
+//                    echo "<pre>";
+//                    print_r(__SOURCE_PATH."/{$sub_path}/{$sub_module}/views/");
+//                    echo "</pre>";
+//                    exit();
+
                 }
+
+
+//                $sub_module = $dispatcher->getParam('sub-module');
+//                if(!empty($sub_module)) {
+////                    $dispatcher->setDefaultNamespace("MyApp\\Controllers\\".Text::camelize($sub_module));
+//                    $dispatcher->setNamespaceName("MyApp\\Controllers\\".Text::camelize($sub_module));
+////                    $dispatcher->getDI()->get('router')->setDefaultNamespace("MyApp\\Controllers\\".Text::camelize($sub_module));
+//                }
 
                 // -- Load view file by 'pick' function --
 //                $controller = $dispatcher->getDI()->get('router')->getControllerName();
@@ -233,7 +292,11 @@ class Application extends \Phalcon\Mvc\Application
 //                echo "</pre>";
 
 
-                $namespace = str_replace("MyApp\\Controllers\\", '', $dispatcher->getNamespaceName());
+//                $namespace = str_replace("MyApp\\Controllers\\", '', $dispatcher->getNamespaceName());
+                // -- Get last item in namespace controller --
+                $arrExplode = explode('\\',$dispatcher->getNamespaceName());
+                $namespace = end($arrExplode);
+
                 $namespace = str_replace('_', '-', Text::uncamelize($namespace));
                 $controller = str_replace('_', '-', Text::uncamelize($dispatcher->getControllerName()));
                 $action = str_replace('_', '-', Text::uncamelize($dispatcher->getActionName()));
@@ -249,12 +312,18 @@ class Application extends \Phalcon\Mvc\Application
                 // -- https://github.com/phalcon/cphalcon/issues/670 --
                 $view->pick(["{$namespace}/{$controller}/{$action}"]); // magic is in brackets
 
+//                echo "<pre>";
+//                print_r($view->getViewsDir());
+//                echo "</pre>";
+//                exit();
+
+
                 // -- Function : $this->view->render => khong su dung duoc --
 
 //                echo "<pre>321312";
 //                print_r($dispatcher->getDI()->get('view'));
 //                echo "</pre>";
-                exit();
+//                exit();
 
                 // -- Day la 1 cach dung 'sub-module' nhung phai kiem tra ca 2 truong hop
 //                $pick_view_path = $dispatcher->getParam('pick-view-path');

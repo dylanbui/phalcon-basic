@@ -6,7 +6,7 @@
  * Time: 6:16 PM
  */
 
-namespace MyApp;
+namespace App;
 
 class CustomRenderer extends \Phalcon\Mvc\User\Plugin
 {
