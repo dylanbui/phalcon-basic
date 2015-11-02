@@ -36,7 +36,7 @@ class IndexController extends ControllerBase
     {
 
         $this->dispatcher->forward(array(
-            'namespace' => 'MyApp\Controllers\IndexShowNamespace',
+            'namespace' => 'App\Controllers\IndexShowNamespace',
             'controller' => 'UsersManager',
             'action' => 'acceptForward'
         ));

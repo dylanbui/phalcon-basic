@@ -111,13 +111,6 @@ class Application extends \Phalcon\Mvc\Application
             foreach ($this->config['routers'] as $link => $itemRouter)
                 $router->add($link, $itemRouter);
 
-            $router->add('[/]{0,1}', array(
-                'sub-path' => 'app',
-                'sub-module' => 'index',
-                'controller' => 'index',
-                'action' => 'index'
-            ));
-
             $router->add('/([a-zA-Z0-9\_\-]+)/:controller/:action/:params', array(
                 'sub-path' => 'app',
                 'sub-module' => 1,
@@ -142,14 +135,14 @@ class Application extends \Phalcon\Mvc\Application
                 'action' => 'index'
             ));
 
-            // -- Nhung router Admin thi de phia sau, no se match voi router gan giong nhat --
-
-            $router->add('/admin', array(
-                'sub-path' => 'admin',
+            $router->add('[/]{0,1}', array(
+                'sub-path' => 'app',
                 'sub-module' => 'index',
                 'controller' => 'index',
                 'action' => 'index'
             ));
+
+            // -- Nhung router Admin thi de phia sau, no se match voi router gan giong nhat --
 
             $router->add('/admin/([a-zA-Z0-9\_\-]+)/:controller/:action/:params', array(
                 'sub-path' => 'admin',
@@ -171,6 +164,13 @@ class Application extends \Phalcon\Mvc\Application
             $router->add('/admin/([a-zA-Z0-9\_\-]+)[/]{0,1}', array(
                 'sub-path' => 'admin',
                 'sub-module' => 1,
+                'controller' => 'index',
+                'action' => 'index'
+            ));
+
+            $router->add('/admin[/]{0,1}', array(
+                'sub-path' => 'admin',
+                'sub-module' => 'index',
                 'controller' => 'index',
                 'action' => 'index'
             ));
@@ -209,12 +209,6 @@ class Application extends \Phalcon\Mvc\Application
                 $sub_path = $dispatcher->getParam('sub-path');
                 if(!empty($sub_path)) {
                     $sub_module = $dispatcher->getParam('sub-module');
-
-//                    echo "<pre>";
-//                    print_r(Text::camelize($sub_path)."\\Controllers\\".Text::camelize($sub_module));
-//                    echo "</pre>";
-//                    exit();
-
                     $dispatcher->setNamespaceName(Text::camelize($sub_path)."\\Controllers\\".Text::camelize($sub_module));
                     $view = $dispatcher->getDI()->get('view');
                     $view->setViewsDir(__SOURCE_PATH."/{$sub_path}/views/");
