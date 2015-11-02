@@ -1,6 +1,6 @@
 <?php
 
-namespace MyApp\Controllers\Admin;
+namespace MyApp\Controllers\Site;
 
 use Phalcon\Mvc\Controller;
 

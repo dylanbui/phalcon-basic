@@ -1,6 +1,6 @@
 <?php
 
-namespace MyApp\Controllers\Admin;
+namespace MyApp\Controllers\Site;
 
 class UsersController extends ControllerBase
 {
@@ -8,5 +8,6 @@ class UsersController extends ControllerBase
     public function indexAction()
     {
     	echo '[' . __METHOD__ . ']';
+        $this->view->my_file = '[' . __METHOD__ . ']';
     }
 }
