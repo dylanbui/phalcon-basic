@@ -210,8 +210,8 @@ class Application extends \Phalcon\Mvc\Application
                 if(!empty($sub_path)) {
                     $sub_module = $dispatcher->getParam('sub-module');
                     $dispatcher->setNamespaceName(Text::camelize($sub_path)."\\Controllers\\".Text::camelize($sub_module));
-                    $view = $dispatcher->getDI()->get('view');
-                    $view->setViewsDir(__SOURCE_PATH."/{$sub_path}/views/");
+//                    $view = $dispatcher->getDI()->get('view');
+//                    $view->setViewsDir(__SOURCE_PATH."/{$sub_path}/views/");
 
 //                    echo "<pre>";
 //                    print_r(__SOURCE_PATH."/{$sub_path}/{$sub_module}/views/");
@@ -289,9 +289,9 @@ class Application extends \Phalcon\Mvc\Application
 //                $namespace = str_replace("MyApp\\Controllers\\", '', $dispatcher->getNamespaceName());
                 // -- Get last item in namespace controller --
                 $arrExplode = explode('\\',$dispatcher->getNamespaceName());
-                $namespace = end($arrExplode);
-
-                $namespace = str_replace('_', '-', Text::uncamelize($namespace));
+                $sub_path = str_replace('_', '-', Text::uncamelize($arrExplode[0]));
+//                $namespace = end($arrExplode);
+                $namespace = str_replace('_', '-', Text::uncamelize(end($arrExplode)));
                 $controller = str_replace('_', '-', Text::uncamelize($dispatcher->getControllerName()));
                 $action = str_replace('_', '-', Text::uncamelize($dispatcher->getActionName()));
 
@@ -300,8 +300,11 @@ class Application extends \Phalcon\Mvc\Application
                 echo "</pre>";
 
                 $view = $dispatcher->getDI()->get('view');
+                $view->setViewsDir(__SOURCE_PATH."/{$sub_path}/views/");
                 $view->setLayoutsDir($namespace.'/');
                 $view->setLayout($namespace);
+
+
                 // -- [BUG] Phalcon\Mvc\View::pick() disables layout --
                 // -- https://github.com/phalcon/cphalcon/issues/670 --
                 $view->pick(["{$namespace}/{$controller}/{$action}"]); // magic is in brackets

@@ -1,10 +1,10 @@
 <?php
 
-namespace MyApp\Controllers\Site;
+namespace App\Controllers\MySite;
 
-use Phalcon\Mvc\Controller;
+use App\Base\BaseController;
 
-class ControllerBase extends Controller
+class ControllerBase extends BaseController
 {
 
 	public function afterExecuteRoute()

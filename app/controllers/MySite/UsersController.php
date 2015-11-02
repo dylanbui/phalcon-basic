@@ -1,6 +1,6 @@
 <?php
 
-namespace MyApp\Controllers\Site;
+namespace App\Controllers\MySite;
 
 class UsersController extends ControllerBase
 {

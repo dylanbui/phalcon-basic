@@ -2,9 +2,9 @@
 
 namespace App\Controllers\IndexShowNamespace;
 
-use Phalcon\Mvc\Controller;
+use App\BaseController;
 
-class ControllerBase extends Controller
+class ControllerBase extends BaseController
 {
 
 	public function afterExecuteRoute()
