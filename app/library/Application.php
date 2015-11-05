@@ -22,6 +22,7 @@ use Phalcon\DiInterface,
     Phalcon\Mvc\View\Engine\Volt as VoltEngine,
     Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter,
     Phalcon\Session\Adapter\Files as SessionAdapter,
+    Phalcon\Session\Adapter\Database as SessionDatabase,
     Phalcon\Text;
 
 class Application extends \Phalcon\Mvc\Application
@@ -88,8 +89,26 @@ class Application extends \Phalcon\Mvc\Application
      */
     protected function _registerSession()
     {
+//        $this->getDI()->setShared('session', function() {
         $this->getDI()->setShared('session', function() {
-            $session = new SessionAdapter();
+//            $session = new SessionAdapter();
+//            $session->start();
+//            return $session;
+
+            // Create a connection
+//            $connection = new DbAdapter(array(
+//                'host' => $this->config['database']['host'],
+//                'username' => $this->config['database']['username'],
+//                'password' => $this->config['database']['password'],
+//                'dbname' => $this->config['database']['dbname']
+//            ));
+
+            $connection = $this->getDI()->get('db');
+            $session = new SessionDatabase(array(
+                'db' => $connection,
+                'table' => 'session_data'
+            ));
+
             $session->start();
             return $session;
         });
@@ -357,10 +376,10 @@ class Application extends \Phalcon\Mvc\Application
     {
         // -- Do not use \Exception because it was captured in ErrorHandle --
 
-        $this->_registerView($this->config);
-        $this->_registerSession($this->config);
         $this->_registerDatabase($this->config);
+        $this->_registerSession($this->config);
         $this->_registerRouters($this->config);
+        $this->_registerView($this->config);
         $this->_registerDispatcher($this->config);
 
         echo $this->handle()->getContent();

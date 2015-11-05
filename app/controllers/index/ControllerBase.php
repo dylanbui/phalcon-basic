@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Index;
 
-use Phalcon\Mvc\Controller;
+use App\Base\Controller;
 
 class ControllerBase extends Controller
 {

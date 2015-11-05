@@ -5,7 +5,7 @@ $arrConfig = array(
         'host'        => 'localhost',
         'username'    => 'root',
         'password'    => '',
-        'dbname'      => 'z-cms',
+        'dbname'      => 'pc-cms',
     ),
     'application' => array(
         'controllersDir' => __APP_PATH . 'controllers/',

@@ -71,6 +71,7 @@ define ('__JS_URL', __ASSET_URL.'js/');
         array (
             'Helper' => __APP_PATH.'helper',
             'App' => $config['application']['libraryDir'],
+            'Phalcon' => $config['application']['libraryDir'].'Phalcon/',
             'App\Controllers' => __APP_PATH.'controllers/',
             'App\Models' => __APP_PATH.'models/',
             'Admin\Controllers' => __ADMIN_PATH.'controllers/'

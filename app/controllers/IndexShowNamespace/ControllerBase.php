@@ -2,9 +2,7 @@
 
 namespace App\Controllers\IndexShowNamespace;
 
-use App\BaseController;
-
-class ControllerBase extends BaseController
+class ControllerBase extends \App\Base\Controller
 {
 
 	public function afterExecuteRoute()
