@@ -8,9 +8,7 @@ class UsersManagerController extends ControllerBase
     public function indexAction()
     {
         $this->view->fileAction = '[' . __METHOD__ . ']';
-        echo "[' . __METHOD__ . ']'";
-
-
+        echo '[' . __METHOD__ . ']';
 //        exit();
     }
 

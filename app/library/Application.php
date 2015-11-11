@@ -67,6 +67,22 @@ class Application extends \Phalcon\Mvc\Application
             ));
             return $view;
         }, true);
+
+
+//        // Register a user component
+//        $this->getDI()->set('layoutComponent', function () {
+//            //    return new ElementsComponent();
+//            //    return new \MyApp\Controllers\Common\CommonComponent();
+//
+//            echo "<pre>";
+//            print_r('register layoutComponent');
+//            echo "</pre>";
+//            exit();
+//
+//            return new LayoutComponent();
+//        });
+
+
     }
 
     /**
@@ -102,13 +118,11 @@ class Application extends \Phalcon\Mvc\Application
 //                'password' => $this->config['database']['password'],
 //                'dbname' => $this->config['database']['dbname']
 //            ));
-
             $connection = $this->getDI()->get('db');
             $session = new SessionDatabase(array(
                 'db' => $connection,
                 'table' => 'session_data'
             ));
-
             $session->start();
             return $session;
         });
@@ -138,7 +152,7 @@ class Application extends \Phalcon\Mvc\Application
                 'params' => 4
             ))->convert('action', function($action){
                 return Text::camelize($action);
-            });;
+            });
 
             $router->add('/([a-zA-Z0-9\_\-]+)/:controller[/]{0,1}', array(
                 'sub-path' => 'app',
@@ -195,7 +209,6 @@ class Application extends \Phalcon\Mvc\Application
             ));
 
             return $router;
-
         }, true);
     }
 
@@ -226,9 +239,12 @@ class Application extends \Phalcon\Mvc\Application
                 echo "</pre></b>";
 
                 $sub_path = $dispatcher->getParam('sub-path');
+                $defaultNamespaceController = '';
                 if(!empty($sub_path)) {
                     $sub_module = $dispatcher->getParam('sub-module');
-                    $dispatcher->setNamespaceName(Text::camelize($sub_path)."\\Controllers\\".Text::camelize($sub_module));
+                    $defaultNamespaceController = Text::camelize($sub_path)."\\Controllers\\";
+                    $dispatcher->setDefaultNamespace($defaultNamespaceController);
+                    $dispatcher->setNamespaceName($defaultNamespaceController.Text::camelize($sub_module));
 //                    $view = $dispatcher->getDI()->get('view');
 //                    $view->setViewsDir(__SOURCE_PATH."/{$sub_path}/views/");
 
@@ -238,6 +254,12 @@ class Application extends \Phalcon\Mvc\Application
 //                    exit();
 
                 }
+
+                // Register a user component
+                $dispatcher->getDI()->set('layoutComponent', function () use ($defaultNamespaceController) {
+                    $class = $defaultNamespaceController.'LayoutComponent';
+                    return new $class();
+                });
 
 
 //                $sub_module = $dispatcher->getParam('sub-module');
@@ -364,7 +386,7 @@ class Application extends \Phalcon\Mvc\Application
             $eventsManager->attach('application:viewRender', new CustomRenderer());
 
             $dispatcher->setEventsManager($eventsManager);
-            $dispatcher->setDefaultNamespace('MyApp\Controllers');
+//            $dispatcher->setDefaultNamespace('App\Controllers');
             return $dispatcher;
         });
 
@@ -372,7 +394,7 @@ class Application extends \Phalcon\Mvc\Application
 
     }
 
-    public function main()
+    public function run()
     {
         // -- Do not use \Exception because it was captured in ErrorHandle --
 

@@ -5,14 +5,31 @@
 	</head>
 	<body>
 
-        <h1 style="color:red">ADMIN DASHBOARD</h1>
-        <br><br>
-        <b>Start MAIN LAYOUT</b>
-        <br><br><br><br>
-        <?php echo $this->getContent(); ?>
+    <b>Start MAIN LAYOUT</b><br><br>
+    <table cellpadding="50" border="2" width="100%" style="border-color: #0000FF;">
+        <tr>
+            <td>
+                <h1 style="color:red">ADMIN DASHBOARD</h1>
+                <h1>layoutComponent</h1>
+                <?= $this->layoutComponent->getMenu(); ?>
+                <br>
+                <?= $this->layoutComponent->getTabs(); ?>
 
-        <br><br><br><br>
-        <b>End MAIN LAYOUT</b>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <br><br><br><br>
+
+                <?php echo $this->getContent(); ?>
+
+                <br><br><br><br>
+
+            </td>
+        </tr>
+    </table>
+    <b>End MAIN LAYOUT</b><br><br>
 
 	</body>
 </html>

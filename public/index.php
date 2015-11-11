@@ -74,7 +74,8 @@ define ('__JS_URL', __ASSET_URL.'js/');
             'Phalcon' => $config['application']['libraryDir'].'Phalcon/',
             'App\Controllers' => __APP_PATH.'controllers/',
             'App\Models' => __APP_PATH.'models/',
-            'Admin\Controllers' => __ADMIN_PATH.'controllers/'
+            'Admin\Controllers' => __ADMIN_PATH.'controllers/',
+            'Admin\Models' => __ADMIN_PATH.'models/'
 //            'MyApp\Plugins' => $config->application->pluginsDir,
 //            'MyApp\MyClass' => __APP_PATH.'myapp-class'
         )
@@ -101,7 +102,7 @@ define ('__JS_URL', __ASSET_URL.'js/');
      */
     $application = new \App\Application($di, $config);
 // -- Do not use \Exception because it was captured in ErrorHandle --
-    $application->main();
+    $application->run();
 //    echo $application->handle()->getContent();
 
 //} catch (\Exception $e) {

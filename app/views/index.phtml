@@ -33,6 +33,12 @@
     </div>
 
     <div id="content">
+
+        <h1>layoutComponent</h1>
+        <?= $this->layoutComponent->getMenu(); ?>
+        <br>
+        <?= $this->layoutComponent->getTabs(); ?>
+
         <?php echo $this->getContent(); ?>
     </div>
 
