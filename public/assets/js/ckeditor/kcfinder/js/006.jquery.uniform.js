@@ -211,7 +211,7 @@ Enjoy!
      * Create a div/span combo for uniforming an element
      *
      * @param jQuery $el Element to wrap
-     * @param Object options Options for the element, set by the user
+     * @param Object options Options for the element, set by the User
      * @param Object divSpanConfig Options for how we wrap the div/span
      * @return Object Contains the div and span as properties
      */

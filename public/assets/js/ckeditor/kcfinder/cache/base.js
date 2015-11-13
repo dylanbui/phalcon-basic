@@ -219,7 +219,7 @@ Enjoy!
      * Create a div/span combo for uniforming an element
      *
      * @param jQuery $el Element to wrap
-     * @param Object options Options for the element, set by the user
+     * @param Object options Options for the element, set by the User
      * @param Object divSpanConfig Options for how we wrap the div/span
      * @return Object Contains the div and span as properties
      */
@@ -1185,7 +1185,7 @@ Enjoy!
     {
         var $elem = jQuery(this);
 
-        // Merge the defaults and any user defined settings.
+        // Merge the defaults and any User defined settings.
         settings = jQuery.extend({}, defaults, event.data);
 
         // If object also has click handler, store it and unbind. Taphold will trigger the
@@ -1231,7 +1231,7 @@ Enjoy!
             }, settings.duration));
     }
 
-    // When user ends a tap or click, decide what we should do.
+    // When User ends a tap or click, decide what we should do.
     function stopHandler(event)
     {
         var $elem = jQuery(this);
@@ -1257,7 +1257,7 @@ Enjoy!
         }
     }
 
-    // If a user prematurely leaves the boundary of the object we're working on.
+    // If a User prematurely leaves the boundary of the object we're working on.
     function leaveHandler(event)
     {
         // Cancel the event.
@@ -4176,7 +4176,7 @@ _.clearClipboard = function() {
   *      @desc Upload files using drag and drop
   *   @package KCFinder
   *   @version 3.12
-  *    @author Forum user (updated by Pavel Tzonkov)
+  *    @author Forum User (updated by Pavel Tzonkov)
   * @copyright 2010-2014 KCFinder Project
   *   @license http://opensource.org/licenses/GPL-3.0 GPLv3
   *   @license http://opensource.org/licenses/LGPL-3.0 LGPLv3

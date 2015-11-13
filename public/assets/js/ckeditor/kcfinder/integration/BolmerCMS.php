@@ -20,7 +20,7 @@ class BolmerCMS{
             define('IN_MANAGER_MODE', true);
             $init = realpath(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))."/index.php");
             include_once($init);
-            $type = getService('user', true)->getLoginUserType();
+            $type = getService('User', true)->getLoginUserType();
             if($type=='manager'){
                 self::$authenticated = true;
                 if (!isset($_SESSION['KCFINDER'])) {

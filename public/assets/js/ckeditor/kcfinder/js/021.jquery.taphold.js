@@ -16,7 +16,7 @@
     {
         var $elem = jQuery(this);
 
-        // Merge the defaults and any user defined settings.
+        // Merge the defaults and any User defined settings.
         settings = jQuery.extend({}, defaults, event.data);
 
         // If object also has click handler, store it and unbind. Taphold will trigger the
@@ -62,7 +62,7 @@
             }, settings.duration));
     }
 
-    // When user ends a tap or click, decide what we should do.
+    // When User ends a tap or click, decide what we should do.
     function stopHandler(event)
     {
         var $elem = jQuery(this);
@@ -88,7 +88,7 @@
         }
     }
 
-    // If a user prematurely leaves the boundary of the object we're working on.
+    // If a User prematurely leaves the boundary of the object we're working on.
     function leaveHandler(event)
     {
         // Cancel the event.

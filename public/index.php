@@ -45,6 +45,7 @@ define ('__APP_PATH', __SOURCE_PATH.'/app/');
 define ('__APP_URL', str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']));
 
 // ---- Khong Thay Doi ---- //
+define ('__ADMIN_THEMES_URL', __APP_URL.'a/');
 define ('__ASSET_URL', __APP_URL.'assets/');
 define ('__IMAGE_URL', __ASSET_URL.'images/');
 define ('__CSS_URL', __ASSET_URL.'css/');
@@ -52,7 +53,7 @@ define ('__JS_URL', __ASSET_URL.'js/');
 
 // 	$const = get_defined_constants(true);
 // 	echo "<pre>";
-// 	print_r($const['user']);
+// 	print_r($const['User']);
 // 	echo "</pre>";
 // 	exit();
 

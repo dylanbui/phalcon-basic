@@ -15,14 +15,14 @@ class UsersManagerController extends ControllerBase
         $this->view->fileAction = '[' . __METHOD__ . ']';
 
         // Set a session variable
-        $this->session->set("user-name", "Michael Coporation");
-        $this->session->session_data = $this->session->get("user-name");
+        $this->session->set("User-name", "Michael Coporation");
+        $this->session->session_data = $this->session->get("User-name");
     }
 
     public function getSessionAction()
     {
         $this->view->fileAction = '[' . __METHOD__ . ']';
-        $this->session->session_data = $this->session->get("user-name");
+        $this->session->session_data = $this->session->get("User-name");
     }
 
 }

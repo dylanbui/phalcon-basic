@@ -69,7 +69,7 @@ class Application extends \Phalcon\Mvc\Application
         }, true);
 
 
-//        // Register a user component
+//        // Register a User component
 //        $this->getDI()->set('layoutComponent', function () {
 //            //    return new ElementsComponent();
 //            //    return new \MyApp\Controllers\Common\CommonComponent();
@@ -255,7 +255,7 @@ class Application extends \Phalcon\Mvc\Application
 
                 }
 
-                // Register a user component
+                // Register a User component
                 $dispatcher->getDI()->set('layoutComponent', function () use ($defaultNamespaceController) {
                     $class = $defaultNamespaceController.'LayoutComponent';
                     return new $class();

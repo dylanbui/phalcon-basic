@@ -30,19 +30,19 @@ class UsersManagerController extends ControllerBase
         $this->view->fileAction = '[' . __METHOD__ . ']';
 
         // Set a session variable
-        $this->session->set("user-name", "Michael Coporation");
+        $this->session->set("User-name", "Michael Coporation");
         $this->session->set("last-name", "Co Michael");
-        $this->view->session_data = $this->session->get("user-name");
+        $this->view->session_data = $this->session->get("User-name");
     }
 
     public function getSessionAction()
     {
         $this->view->fileAction = '[' . __METHOD__ . ']';
         // Remove a session variable
-        $this->session->remove("user-name");
+        $this->session->remove("User-name");
         // Destroy the whole session
         $this->session->destroy();
-        $this->view->session_data = $this->session->get("user-name");
+        $this->view->session_data = $this->session->get("User-name");
     }
 
 
