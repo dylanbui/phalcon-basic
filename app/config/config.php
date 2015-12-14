@@ -8,12 +8,12 @@ $arrConfig = array(
         'dbname'      => 'pc-cms',
     ),
     'application' => array(
-        'controllersDir' => __APP_PATH . 'controllers/',
-        'modelsDir'      => __APP_PATH . 'models/',
-        'viewsDir'       => __APP_PATH . 'views/',
-        'libraryDir'     => __APP_PATH . 'library/',
-        'cacheDir'       => __APP_PATH . 'cache/',
-        'baseUri'        => '/pc-cms/'
+//        'controllersDir' => __SOURCE_PATH . '/app/controllers/',
+//        'modelsDir'      => __APP_PATH . 'models/',
+//        'viewsDir'       => __APP_PATH . 'views/',
+        'libraryDir'     => __SOURCE_PATH . '/app/library/',
+        'cacheDir'       => __SOURCE_PATH . '/app/cache/'
+//        'baseUri'        => '/pc-cms/'
     )
 );
 

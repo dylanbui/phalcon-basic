@@ -9,7 +9,7 @@
  * other resources.
  */
 
-namespace App;
+namespace PCLib;
 
 use Phalcon\DiInterface,
     Phalcon\DI\FactoryDefault,
@@ -27,17 +27,24 @@ use Phalcon\DiInterface,
 
 class Application extends \Phalcon\Mvc\Application
 {
-    private $config = null;
+    public $config = null;
 
     const ENV_PRODUCTION   = 'production';
     const ENV_STAGING      = 'staging';
     const ENV_TEST         = 'test';
     const ENV_DEVELOPMENT  = 'development';
 
-    public function __construct(DiInterface  $dependencyInjector = null, $config = null)
+    public $loader = null;
+
+
+    private $_pathApp = null;
+    private $_subNamespace = null;
+
+
+    public function __construct(DiInterface  $dependencyInjector = null, $path = null)
     {
         ErrorHandler::register();
-        $this->config = $config;
+        $this->_pathApp = $path;
 
         parent::__construct($dependencyInjector);
     }
@@ -49,8 +56,7 @@ class Application extends \Phalcon\Mvc\Application
          */
         $this->getDI()->set('view', function() use ($config) {
             $view = new View();
-//            $view->setViewsDir($this->config['application']['viewsDir']);
-            $view->setViewsDir(__APP_PATH.'views/');
+            $view->setViewsDir(__SOURCE_PATH.$this->_pathApp.'/views/');
             $view->registerEngines(array(
                 '.volt' => function($view, $di) use ($config) {
 
@@ -111,13 +117,6 @@ class Application extends \Phalcon\Mvc\Application
 //            $session->start();
 //            return $session;
 
-            // Create a connection
-//            $connection = new DbAdapter(array(
-//                'host' => $this->config['database']['host'],
-//                'username' => $this->config['database']['username'],
-//                'password' => $this->config['database']['password'],
-//                'dbname' => $this->config['database']['dbname']
-//            ));
             $connection = $this->getDI()->get('db');
             $session = new SessionDatabase(array(
                 'db' => $connection,
@@ -145,7 +144,6 @@ class Application extends \Phalcon\Mvc\Application
                 $router->add($link, $itemRouter);
 
             $router->add('/([a-zA-Z0-9\_\-]+)/:controller/:action/:params', array(
-                'sub-path' => 'app',
                 'sub-module' => 1,
                 'controller' => 2,
                 'action' => 3,
@@ -155,58 +153,54 @@ class Application extends \Phalcon\Mvc\Application
             });
 
             $router->add('/([a-zA-Z0-9\_\-]+)/:controller[/]{0,1}', array(
-                'sub-path' => 'app',
                 'sub-module' => 1,
                 'controller' => 2,
                 'action' => 'index'
             ));
 
             $router->add('/([a-zA-Z0-9\_\-]+)[/]{0,1}', array(
-                'sub-path' => 'app',
                 'sub-module' => 1,
                 'controller' => 'index',
                 'action' => 'index'
             ));
 
             $router->add('[/]{0,1}', array(
-                'sub-path' => 'app',
                 'sub-module' => 'index',
                 'controller' => 'index',
                 'action' => 'index'
             ));
 
             // -- Nhung router Admin thi de phia sau, no se match voi router gan giong nhat --
-
-            $router->add('/admin/([a-zA-Z0-9\_\-]+)/:controller/:action/:params', array(
-                'sub-path' => 'admin',
-                'sub-module' => 1,
-                'controller' => 2,
-                'action' => 3,
-                'params' => 4
-            ))->convert('action', function($action){
-                return Text::camelize($action);
-            });;
-
-            $router->add('/admin/([a-zA-Z0-9\_\-]+)/:controller[/]{0,1}', array(
-                'sub-path' => 'admin',
-                'sub-module' => 1,
-                'controller' => 2,
-                'action' => 'index'
-            ));
-
-            $router->add('/admin/([a-zA-Z0-9\_\-]+)[/]{0,1}', array(
-                'sub-path' => 'admin',
-                'sub-module' => 1,
-                'controller' => 'index',
-                'action' => 'index'
-            ));
-
-            $router->add('/admin[/]{0,1}', array(
-                'sub-path' => 'admin',
-                'sub-module' => 'index',
-                'controller' => 'index',
-                'action' => 'index'
-            ));
+//            $router->add('/admin/([a-zA-Z0-9\_\-]+)/:controller/:action/:params', array(
+//                'sub-path' => 'admin',
+//                'sub-module' => 1,
+//                'controller' => 2,
+//                'action' => 3,
+//                'params' => 4
+//            ))->convert('action', function($action){
+//                return Text::camelize($action);
+//            });;
+//
+//            $router->add('/admin/([a-zA-Z0-9\_\-]+)/:controller[/]{0,1}', array(
+//                'sub-path' => 'admin',
+//                'sub-module' => 1,
+//                'controller' => 2,
+//                'action' => 'index'
+//            ));
+//
+//            $router->add('/admin/([a-zA-Z0-9\_\-]+)[/]{0,1}', array(
+//                'sub-path' => 'admin',
+//                'sub-module' => 1,
+//                'controller' => 'index',
+//                'action' => 'index'
+//            ));
+//
+//            $router->add('/admin[/]{0,1}', array(
+//                'sub-path' => 'admin',
+//                'sub-module' => 'index',
+//                'controller' => 'index',
+//                'action' => 'index'
+//            ));
 
             return $router;
         }, true);
@@ -238,11 +232,12 @@ class Application extends \Phalcon\Mvc\Application
                 print_r($event->getType());
                 echo "</pre></b>";
 
-                $sub_path = $dispatcher->getParam('sub-path');
+//                $sub_path = $this->_pathApp; //$dispatcher->getParam('sub-path');
                 $defaultNamespaceController = '';
-                if(!empty($sub_path)) {
+//                if(!empty($sub_path)) {
                     $sub_module = $dispatcher->getParam('sub-module');
-                    $defaultNamespaceController = Text::camelize($sub_path)."\\Controllers\\";
+//                    $defaultNamespaceController = Text::camelize($sub_path)."\\Controllers\\";
+                    $defaultNamespaceController = $this->_subNamespace."\\Controllers\\";
                     $dispatcher->setDefaultNamespace($defaultNamespaceController);
                     $dispatcher->setNamespaceName($defaultNamespaceController.Text::camelize($sub_module));
 //                    $view = $dispatcher->getDI()->get('view');
@@ -253,7 +248,7 @@ class Application extends \Phalcon\Mvc\Application
 //                    echo "</pre>";
 //                    exit();
 
-                }
+//                }
 
                 // Register a User component
                 $dispatcher->getDI()->set('layoutComponent', function () use ($defaultNamespaceController) {
@@ -327,10 +322,11 @@ class Application extends \Phalcon\Mvc\Application
 //                echo "</pre>";
 
 
+                // -- Get current namespace => fix if use forward --
 //                $namespace = str_replace("MyApp\\Controllers\\", '', $dispatcher->getNamespaceName());
                 // -- Get last item in namespace controller --
                 $arrExplode = explode('\\',$dispatcher->getNamespaceName());
-                $sub_path = str_replace('_', '-', Text::uncamelize($arrExplode[0]));
+//                $sub_path = str_replace('_', '-', Text::uncamelize($arrExplode[0]));
 //                $namespace = end($arrExplode);
                 $namespace = str_replace('_', '-', Text::uncamelize(end($arrExplode)));
                 $controller = str_replace('_', '-', Text::uncamelize($dispatcher->getControllerName()));
@@ -341,7 +337,8 @@ class Application extends \Phalcon\Mvc\Application
                 echo "</pre>";
 
                 $view = $dispatcher->getDI()->get('view');
-                $view->setViewsDir(__SOURCE_PATH."/{$sub_path}/views/");
+//                $view->setViewsDir(__SOURCE_PATH."/{$sub_path}/views/");
+                $view->setViewsDir(__SOURCE_PATH."/{$this->_pathApp}/views/");
                 $view->setLayoutsDir($namespace.'/');
                 $view->setLayout($namespace);
 
@@ -383,7 +380,7 @@ class Application extends \Phalcon\Mvc\Application
 
             });
 
-            $eventsManager->attach('application:viewRender', new CustomRenderer());
+//            $eventsManager->attach('application:viewRender', new CustomRenderer());
 
             $dispatcher->setEventsManager($eventsManager);
 //            $dispatcher->setDefaultNamespace('App\Controllers');
@@ -397,6 +394,18 @@ class Application extends \Phalcon\Mvc\Application
     public function run()
     {
         // -- Do not use \Exception because it was captured in ErrorHandle --
+
+        // -- Co the dua model ra ngoai de trong file startup --
+        $this->_subNamespace = Text::camelize($this->_pathApp);
+        $this->loader->registerNamespaces(
+            array (
+                $this->_subNamespace => __SOURCE_PATH.'/'.$this->_pathApp.'/',
+                $this->_subNamespace.'\Controllers' => __SOURCE_PATH.'/'.$this->_pathApp.'/controllers/',
+                $this->_subNamespace.'\Models' => __SOURCE_PATH.'/'.$this->_pathApp.'/models/',
+                $this->_subNamespace.'\Components' => __SOURCE_PATH.'/'.$this->_pathApp.'/components/'
+            )
+            ,true
+        );
 
         $this->_registerDatabase($this->config);
         $this->_registerSession($this->config);

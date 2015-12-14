@@ -2,7 +2,7 @@
 /*
  * https://github.com/phalcon/incubator/tree/master/Library/Phalcon/Error
 */
-namespace App;
+namespace PCLib;
 
 use Phalcon\Di;
 
@@ -140,7 +140,7 @@ class ErrorHandler
 
 
         $view = new \Phalcon\Mvc\View();
-        $view->setViewsDir(__APP_PATH);
+        $view->setViewsDir(__SOURCE_PATH.'/app');
 
         $view->start();
         //Shows recent posts view (app/errors/recent.phtml)

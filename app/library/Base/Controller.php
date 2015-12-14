@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Base;
+namespace PCLib\Base;
 
 class Controller extends \Phalcon\Mvc\Controller
 {

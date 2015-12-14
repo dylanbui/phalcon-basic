@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Index;
 
-use App\Base\Controller;
+use PCLib\Base\Controller;
 
 class ControllerBase extends Controller
 {

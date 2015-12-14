@@ -33,46 +33,65 @@
 //    Phalcon\DI\FactoryDefault,
 //    Phalcon\Mvc\Url as UrlResolver;
 
+// define the site path __SITE_PATH : c:\xampp\htdocs\adv_mvc
+define ('__SITE_PATH', realpath(dirname(dirname(__FILE__))));
+// __SITE_URL : /adv_mvc/
+//  	define ('__SITE_URL', dirname(str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME'])).'/');
+define ('__SITE_URL', str_replace('//','/', dirname(str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME'])).'/'));
+// __BASE_URL : /adv_mvc/admin/
+define ('__BASE_URL', str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']));
+// Co thu muc public_html
+define ('__PUBLIC_HTML', __SITE_URL.'public_html/');
+
 // define the MySite path : c:\xampp\htdocs\pc-simple
-define ('__SOURCE_PATH', realpath(dirname(dirname(__FILE__))));
+define ('__SOURCE_PATH', realpath(dirname(dirname(dirname(__FILE__)))));
 
 // define the MySite path __ADMIN_PATH : c:\xampp\htdocs\pc-simple\admin
 //define ('__ADMIN_PATH', __SOURCE_PATH.'/admin/');
 
 // define the MySite path __APP_PATH : c:\xampp\htdocs\pc-simple\app
-define ('__APP_PATH', __SOURCE_PATH.'/app/');
+define ('__APP_PATH', __SOURCE_PATH.'/admin/');
 
 // __APP_URL : /pc-simple/public/
 define ('__APP_URL', str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']));
 
 // ---- Khong Thay Doi ---- //
 //define ('__ADMIN_THEMES_URL', __APP_URL.'a/');
-define ('__ASSET_URL', __APP_URL.'assets/');
-define ('__IMAGE_URL', __ASSET_URL.'images/');
-define ('__CSS_URL', __ASSET_URL.'css/');
-define ('__JS_URL', __ASSET_URL.'js/');
 
-// 	$const = get_defined_constants(true);
-// 	echo "<pre>";
-// 	print_r($const['user']);
-// 	echo "</pre>";
-// 	exit();
+define ('__ASSET_URL', __PUBLIC_HTML.'assets/');
+define ('__TEMPLATE_URL', __PUBLIC_HTML.'a/flaty_template/');
+
+define ('__IMAGE_URL', __PUBLIC_HTML.'a/images/');
+define ('__CSS_URL', __PUBLIC_HTML.'a/stylesheets/');
+define ('__JS_URL', __PUBLIC_HTML.'a/javascripts/');
+
+
+//define ('__ASSET_URL', __APP_URL.'assets/');
+//define ('__IMAGE_URL', __ASSET_URL.'images/');
+//define ('__CSS_URL', __ASSET_URL.'css/');
+//define ('__JS_URL', __ASSET_URL.'js/');
+
+ 	$const = get_defined_constants(true);
+ 	echo "<pre>";
+ 	print_r($const['user']);
+ 	echo "</pre>";
+ 	exit();
 
 //try {
 
-    /**
-     * Read the configuration
-     */
-    $config = include __APP_PATH . "config/config.php";
+/**
+ * Read the configuration
+ */
+$config = include __APP_PATH . "config/config.php";
 
-    // Init a DI
-    $di = new \Phalcon\DI\FactoryDefault();
+// Init a DI
+$di = new \Phalcon\DI\FactoryDefault();
 
-    $loader = null;
-    include __SOURCE_PATH . "/admin/startup.php";
-    /**
-     * Read auto-loader
-     */
+$loader = null;
+include __SOURCE_PATH . "/admin/startup.php";
+/**
+ * Read auto-loader
+ */
 //    $loader = new \Phalcon\Loader();
 //    $loader->registerNamespaces(
 //        array (
@@ -93,24 +112,24 @@ define ('__JS_URL', __ASSET_URL.'js/');
 
 //    use Helper\Common as Common;
 
-    /**
-     * The URL component is used to generate all kind of urls in the application
-     */
-    $di->set('url', function() use ($config) {
-        $url = new Phalcon\Mvc\Url(); //UrlResolver();
-        $url->setBaseUri($config['application']['baseUri']);
-        return $url;
-    }, true);
+/**
+ * The URL component is used to generate all kind of urls in the application
+ */
+$di->set('url', function() use ($config) {
+    $url = new Phalcon\Mvc\Url(); //UrlResolver();
+    $url->setBaseUri($config['application']['baseUri']);
+    return $url;
+}, true);
 
-    /**
-     * Handle the request
-     */
-    $application = new \PCLib\Application($di, 'app');
-    $application->config = $config;
-    $application->loader = $loader;
+/**
+ * Handle the request
+ */
+$application = new \PCLib\Application($di, 'app');
+$application->config = $config;
+$application->loader = $loader;
 
 // -- Do not use \Exception because it was captured in ErrorHandle --
-    $application->run();
+$application->run();
 //    echo $application->handle()->getContent();
 
 //} catch (\Exception $e) {
